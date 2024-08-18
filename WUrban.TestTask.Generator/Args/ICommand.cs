@@ -5,5 +5,7 @@ namespace WUrban.TestTask.Generator.Args
     {
         string CommandName { get; }
         Task ExecuteAsync();
+
+        string Description { get; }
     }
 }

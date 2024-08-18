@@ -10,6 +10,7 @@ namespace WUrban.TestTask.Generator.Args
         public uint SizeInBytes { get; set; }
         public string CommandName => Name;
         public IExecutor<GenerateFileCommand> FileGenerator { get; set; }
+        public string Description => $"{Name} --size=4096";
 
         public GenerateFileCommand(uint sizeInBytes, IExecutor<GenerateFileCommand> fileGenerator)
         {
