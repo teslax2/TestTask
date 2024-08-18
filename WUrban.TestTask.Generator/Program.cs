@@ -6,10 +6,10 @@ namespace WUrban.TestTask.Generator
     {
         static async Task Main(string[] args)
         {
-            Console.WriteLine("start");
+            Console.WriteLine($"Started at {DateTime.Now}");
             var command = Parser.Parse(args);
             await command.ExecuteAsync();
-            Console.WriteLine("stop");
+            Console.WriteLine($"Completed at {DateTime.Now}");
         }
     }
 }

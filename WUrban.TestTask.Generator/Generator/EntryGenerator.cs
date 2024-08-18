@@ -46,29 +46,26 @@ namespace WUrban.TestTask.Generator.Generator
             "low", "old", "poor", "quick", "red", "short", "slow", "small", "strong", "white",
             "young", "left", "right", "second", "third", "next", "last", "same", "other", "true"
         };
-        private readonly Random _random;
-        private readonly StringBuilder _stringBuilder;
-        private static object _lock = new();
 
-        public EntryGenerator()
+        public static Entry GenerateEntry()
         {
-            _random = new Random();
-            _stringBuilder = new StringBuilder();
-        }
-
-        public Entry GenerateEntry()
-        {
-            lock (_lock)
+            var random = new Random();
+            var length = random.Next(3,20);
+            var sentence = new string[length];
+            for (int i = 0; i < length; i++)
             {
-                _stringBuilder.Clear();
-                var length = _random.Next(20);
-                for (int i = 0; i < length; i++)
+                if (i == 0)
                 {
-                    var word = _words[_random.Next(_words.Length)];
-                    _stringBuilder.Append($"{word} ");
+                    var word = _words[random.Next(_words.Length)];
+                    sentence[i] = char.ToUpper(word[0]) + word[1..];
                 }
-                return new Entry(_random.Next(), _stringBuilder.ToString());
+                else
+                {
+                    sentence[i] = _words[random.Next(_words.Length)];
+                }
+
             }
+            return new Entry(random.Next(),string.Join(" ",sentence));
         }
     }
 }

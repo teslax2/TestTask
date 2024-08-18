@@ -1,4 +1,4 @@
-﻿
+﻿using System.Text;
 using WUrban.TestTask.Generator.Args;
 
 namespace WUrban.TestTask.Generator.Generator
@@ -10,13 +10,12 @@ namespace WUrban.TestTask.Generator.Generator
         public async Task ExecuteAsync(GenerateFileCommand command)
         {
             using var fileHandle = File.OpenWrite("output.txt");
-            using var stringWriter = new StreamWriter(fileHandle);
-            var entryGenerator = new EntryGenerator();
+            using var streamWriter = new StreamWriter(fileHandle, Encoding.UTF8, bufferSize: 10_000_000);
             while (_currentSize < command.SizeInBytes)
             {
-                var entry = entryGenerator.GenerateEntry();
+                var entry = EntryGenerator.GenerateEntry();
                 _currentSize += entry.Size;
-                await stringWriter.WriteLineAsync(entry.ToString());
+                await streamWriter.WriteAsync(entry.ToString());
             }
         }
     }
