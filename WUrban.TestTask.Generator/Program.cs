@@ -1,10 +1,15 @@
-﻿namespace WUrban.TestTask.Generator
+﻿using WUrban.TestTask.Generator.Args;
+
+namespace WUrban.TestTask.Generator
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            Console.WriteLine("start");
+            var command = Parser.Parse(args);
+            await command.ExecuteAsync();
+            Console.WriteLine("stop");
         }
     }
 }
