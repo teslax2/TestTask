@@ -1,4 +1,4 @@
-﻿using WUrban.TestTask.Generator.Args;
+﻿using WUrban.TestTask.Generator.Utils;
 
 namespace WUrban.TestTask.Generator
 {

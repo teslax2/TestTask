@@ -14,7 +14,7 @@ namespace WUrban.TestTask.Generator.Generator
             while (_currentSize < command.SizeInBytes)
             {
                 var entry = EntryGenerator.GenerateEntry();
-                _currentSize += entry.Size;
+                _currentSize += entry.Size();
                 await streamWriter.WriteAsync(entry.ToString());
             }
         }

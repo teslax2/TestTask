@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "WUrban.TestTask.Sorter": {
+      "commandName": "Project",
+      "commandLineArgs": "Sort --path=\"C:\\Users\\wiurban\\source\\repos\\TestTask\\WUrban.TestTask\\WUrban.TestTask.Generator\\bin\\Debug\\net8.0\\output.txt\""
+    }
+  }
+}

@@ -1,9 +1,11 @@
 ﻿
+using WUrban.TestTask.Contracts;
+
 namespace WUrban.TestTask.Generator.Generator
 {
     public record Entry(int Sequence, string Text) : IComparable<Entry>
     {
-        public int Size => System.Text.Encoding.UTF8.GetByteCount($"{ToString()}");
+        public int Size() => System.Text.Encoding.UTF8.GetByteCount($"{ToString()}");
 
         public int CompareTo(Entry? other)
         {
@@ -24,7 +26,26 @@ namespace WUrban.TestTask.Generator.Generator
 
         public override string ToString()
         {
-            return $"{Sequence}. {Text}.{Environment.NewLine}";
+            return $"{Sequence}. {Text}";
+        }
+
+        public static Entry Parse(string text)
+        {
+
+            var dotIndex = text.IndexOf('.');
+            if (dotIndex < 0)
+            {
+                throw new EntryException($"Invalid entry format: {text}");
+            }
+
+            try
+            {
+                return new Entry(int.Parse(text[..dotIndex]), text[++dotIndex..]);
+            }
+            catch (Exception ex)
+            {
+                throw new EntryException(ex.ToString());
+            }
         }
     }
 }

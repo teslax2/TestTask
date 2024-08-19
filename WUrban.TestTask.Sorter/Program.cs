@@ -1,10 +1,18 @@
-﻿namespace WUrban.TestTask.Sorter
+﻿using System.Diagnostics;
+using WUrban.TestTask.Sorter.Utils;
+
+namespace WUrban.TestTask.Sorter
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            var command = Parser.Parse(args);
+            await command.ExecuteAsync();
+            stopwatch.Stop();
+            Console.WriteLine(stopwatch.Elapsed.ToString());
         }
     }
 }
