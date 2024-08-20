@@ -1,7 +1,7 @@
 ﻿using WUrban.TestTask.Generator.Generator;
-using WUrban.TestTask.Sorter.Commands;
+using WUrban.TestTask.Sorter.Sorters;
 
-namespace WUrban.TestTask.Sorter.Sorters
+namespace WUrban.TestTask.Sorter.Commands
 {
     internal class SortCommandExecutor : IExecutor<SortCommand>
     {

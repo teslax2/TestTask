@@ -10,13 +10,13 @@ namespace WUrban.TestTask.Sorter.Commands
         public const string Name = "Sort";
         public string Path {  get; }
         public string Output { get; }
-        public IExecutor<SortCommand> Executor { get; }
+        private readonly IExecutor<SortCommand> _executor;
 
         public SortCommand(string path, string output, IExecutor<SortCommand> executor) 
         {
             Path = path;
             Output = output;
-            Executor = executor;
+            _executor = executor;
         }
 
         public static ICommand? ParseFromArgs(string[] args)
@@ -39,7 +39,9 @@ namespace WUrban.TestTask.Sorter.Commands
 
         public async Task ExecuteAsync()
         {
-            await Executor.ExecuteAsync(this);
+            Console.WriteLine($"{DateTime.Now} Sorting file {Path}...");
+            await _executor.ExecuteAsync(this);
+            Console.WriteLine($"{DateTime.Now} File sorted.");
         }
     }
 }

@@ -7,6 +7,7 @@ namespace WUrban.TestTask.Sorter.Sorters.BigFileSorter
         {
             ArgumentNullException.ThrowIfNull(inputPath, nameof(inputPath));
             ArgumentNullException.ThrowIfNull(outputPath, nameof(outputPath));
+
             await new EntriesReader(inputPath)
             .GetEntriesAsync()
             .Partition()
