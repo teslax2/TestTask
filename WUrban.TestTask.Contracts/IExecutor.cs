@@ -1,5 +1,5 @@
 ﻿
-using WUrban.TestTask.Generator.Args;
+using WUrban.TestTask.Contracts;
 
 namespace WUrban.TestTask.Generator.Generator
 {

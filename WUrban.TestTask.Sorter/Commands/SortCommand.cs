@@ -1,4 +1,4 @@
-﻿using WUrban.TestTask.Generator.Args;
+﻿using WUrban.TestTask.Contracts;
 using WUrban.TestTask.Generator.Generator;
 using WUrban.TestTask.Sorter.Sorters;
 

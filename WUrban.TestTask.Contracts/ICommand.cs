@@ -1,5 +1,4 @@
-﻿
-namespace WUrban.TestTask.Generator.Args
+﻿namespace WUrban.TestTask.Contracts
 {
     public interface ICommand
     {

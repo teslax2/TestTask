@@ -1,41 +1,39 @@
-﻿using WUrban.TestTask.Sorter.Commands;
+﻿using System.Buffers;
+using WUrban.TestTask.Contracts;
 
 namespace WUrban.TestTask.Sorter.Sorters.BigFileSorter
 {
-    internal class Partitioner : IDisposable
+    internal class Partitioner
     {
-        public string Path { get; }
-        public long MaxPartitionSize { get; }
-        private Stream _stream;
-        private StreamReader _reader;
+        private readonly EntriesReader _entriesReader;
+        private readonly long _maxPartitionSize;
 
-        public Partitioner(string path, long maxPartitionSize = 100_000_000)
+        public Partitioner(EntriesReader entriesReader,long maxPartitionSize = 50_000_000)
         {
             ArgumentOutOfRangeException.ThrowIfLessThan(maxPartitionSize, 10_000_000);
-            Path = path;
-            MaxPartitionSize = maxPartitionSize;
-            _stream = File.OpenRead(Path);
-            _reader = new StreamReader(_stream, bufferSize: 10_000_000);
+            _entriesReader = entriesReader;
+            _maxPartitionSize = maxPartitionSize;
         }
 
-        public IEnumerable<Partition> GetPartitions()
+        public async Task<IEnumerable<string>> Partition()
         {
-            var count = GetPartitionsCount(Path);
-            for (var i = 0; i < count; i++) {
-                yield return new Partition(_reader, MaxPartitionSize);
+            using var enumerator = _entriesReader.GetEnumerator();
+            var list = new List<Entry>(2560000);
+            var partitions = new List<string>();
+            int size = 0;
+            while (enumerator.MoveNext())
+            {
+                list.Add(enumerator.Current);
+                size += enumerator.Current.Size();
+                if(size >= _maxPartitionSize)
+                {
+                    var file = await list.OrderAndStoreExternalyAsync();
+                    partitions.Add(file);
+                    list.Clear();
+                    size = 0;
+                }
             }
-        }
-
-        private long GetPartitionsCount(string path)
-        {
-            var fileInfo = new FileInfo(path);
-            return fileInfo.Length / MaxPartitionSize;
-        }
-
-        public void Dispose()
-        {
-            _reader?.Dispose();
-            _stream?.Dispose();
+            return partitions;
         }
     }
 }

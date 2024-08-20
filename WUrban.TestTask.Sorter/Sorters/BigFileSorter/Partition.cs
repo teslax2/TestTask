@@ -1,4 +1,4 @@
-﻿using WUrban.TestTask.Generator.Generator;
+﻿using WUrban.TestTask.Contracts;
 
 namespace WUrban.TestTask.Sorter.Sorters.BigFileSorter
 {
@@ -11,16 +11,6 @@ namespace WUrban.TestTask.Sorter.Sorters.BigFileSorter
         public Partition(StreamReader stream, long maxSize) {
             _streamReader = stream;
             _maxSize = maxSize;
-        }
-
-        public async IAsyncEnumerable<Entry> GetEntriesAsync()
-        {
-            _initPosition = _streamReader.BaseStream.Position;
-            while (!_streamReader.EndOfStream && _streamReader.BaseStream.Position < _initPosition + _maxSize)
-            {
-                var line = await _streamReader.ReadLineAsync();
-                yield return Entry.Parse(line);
-            }
         }
 
         public IEnumerable<Entry> GetEntries()
@@ -36,17 +26,12 @@ namespace WUrban.TestTask.Sorter.Sorters.BigFileSorter
 
     internal static class PartitionExtensions
     {
-        public static async Task<string> OrderAndStoreExternalyAsync(this IEnumerable<Entry> entries)
+        public static async Task<string> OrderAndStoreExternalyAsync(this List<Entry> entries)
         {
-            var ordered = entries.OrderBy(x => x);
+            var ordered = entries.Order();
             var tmpFile = Path.GetTempFileName();
-            using var stream = File.OpenWrite(tmpFile);
-            using var writer = new StreamWriter(stream, bufferSize: 8192);
-            foreach (var entry in ordered)
-            {
-                await writer.WriteLineAsync(entry.ToString());
-            }
-            return await Task.FromResult(tmpFile);
+            await File.WriteAllLinesAsync(tmpFile, ordered.Select(x => x.ToString()));
+            return tmpFile;
         }
     }
 }

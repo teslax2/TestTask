@@ -1,4 +1,5 @@
-﻿using WUrban.TestTask.Generator.Generator;
+﻿using WUrban.TestTask.Contracts;
+using WUrban.TestTask.Generator.Generator;
 using WUrban.TestTask.Sorter.Commands;
 using WUrban.TestTask.Sorter.Sorters.BigFileSorter;
 
@@ -8,24 +9,20 @@ namespace WUrban.TestTask.Sorter.Sorters
     {
         public async Task ExecuteAsync(SortCommand command)
         {
-            using var partitioner = new Partitioner(command.Path, 50_000_000);
-            var partitions = partitioner.GetPartitions();
-            var tempFiles = new List<string>();
-            foreach (var partition in partitions)
-            {
-                var tempFile = await partition.GetEntries().OrderAndStoreExternalyAsync();
-                tempFiles.Add(tempFile);
-            }
+            var entriesReader = new EntriesReader(command.Path);
+            var partitioner = new Partitioner(entriesReader);
+            var partitions = await partitioner.Partition();
+
             Console.WriteLine("Merging sorted files...");
-            await MergeSortedFilesAsync(tempFiles, "output.txt");
+            await MergeSortedFilesAsync(partitions, "output.txt");
             // Clean up temp files
-            foreach (var tempFile in tempFiles)
+            foreach (var tempFile in partitions)
             {
                 File.Delete(tempFile);
             }
         }
 
-        private async Task MergeSortedFilesAsync(List<string> sortedFiles, string outputFileName)
+        private async Task MergeSortedFilesAsync(IEnumerable<string> sortedFiles, string outputFileName)
         {
             using var outputStream = File.OpenWrite(outputFileName);
             using var writer = new StreamWriter(outputStream, bufferSize: 8192);

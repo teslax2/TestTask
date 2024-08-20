@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using WUrban.TestTask.Contracts;
 
 namespace WUrban.TestTask.Generator.Generator
 {

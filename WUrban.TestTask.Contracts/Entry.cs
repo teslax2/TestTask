@@ -1,7 +1,4 @@
-﻿
-using WUrban.TestTask.Contracts;
-
-namespace WUrban.TestTask.Generator.Generator
+﻿namespace WUrban.TestTask.Contracts
 {
     public record Entry(int Sequence, string Text) : IComparable<Entry>
     {
@@ -31,7 +28,6 @@ namespace WUrban.TestTask.Generator.Generator
 
         public static Entry Parse(string text)
         {
-
             var dotIndex = text.IndexOf('.');
             if (dotIndex < 0)
             {
@@ -42,9 +38,9 @@ namespace WUrban.TestTask.Generator.Generator
             {
                 return new Entry(int.Parse(text[..dotIndex]), text[++dotIndex..]);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new EntryException(ex.ToString());
+                return new Entry(0, string.Empty);
             }
         }
     }
