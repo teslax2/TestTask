@@ -2,8 +2,6 @@
 {
     public interface ICommand
     {
-        string CommandName { get; }
         Task ExecuteAsync();
-        string Description { get; }
     }
 }

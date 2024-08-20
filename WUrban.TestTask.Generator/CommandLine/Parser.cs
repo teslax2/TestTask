@@ -1,6 +1,5 @@
 ﻿using WUrban.TestTask.Contracts;
 using WUrban.TestTask.Generator.Args;
-using WUrban.TestTask.Generator.Commands;
 
 namespace WUrban.TestTask.Generator.CommandLine
 {
@@ -9,7 +8,7 @@ namespace WUrban.TestTask.Generator.CommandLine
         public static ICommand Parse(string[] args)
         {
             return GenerateFileCommand.ParseFromArgs(args)
-                ?? new HelpCommand();
+                ?? throw new InvalidCommandException("No command or command not supported");
         }
     }
 }

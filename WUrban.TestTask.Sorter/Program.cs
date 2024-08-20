@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using WUrban.TestTask.Sorter.Utils;
+using WUrban.TestTask.Sorter.CommandLine;
 
 namespace WUrban.TestTask.Sorter
 {

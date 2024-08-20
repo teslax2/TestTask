@@ -10,7 +10,7 @@ namespace WUrban.TestTask.Benchmarks
         private const string _filePath = @"C:\Users\wiurban\source\repos\TestTask\WUrban.TestTask\WUrban.TestTask.Generator\bin\Debug\net8.0\output.txt";
 
 
-        //[Benchmark]
+        [Benchmark]
         public void ReadFileLineByLine()
         {
             var lines = ReadFileLineByLineImpl();
@@ -81,7 +81,7 @@ namespace WUrban.TestTask.Benchmarks
             }
         }
 
-        //[Benchmark]
+        [Benchmark]
         public void ReadBlock()
         {
             var lines = ReadBlockImpl();

@@ -7,22 +7,14 @@ namespace WUrban.TestTask.Generator.Args
 {
     internal class GenerateFileCommand : ICommand
     {
-        public const string Name = "GenerateFile";
+        public const string Name = "Generate";
         public uint SizeInBytes { get; set; }
-        public string CommandName => Name;
-        public IExecutor<GenerateFileCommand> FileGenerator { get; set; }
-        public string Description => $"Usage {Name} --size=4096";
+        private IExecutor<GenerateFileCommand> _executor;
 
-        public GenerateFileCommand()
-        {
-            SizeInBytes = 0;
-            FileGenerator = new FileGenerator();
-        }
-
-        public GenerateFileCommand(uint sizeInBytes, IExecutor<GenerateFileCommand> fileGenerator)
+        public GenerateFileCommand(uint sizeInBytes, IExecutor<GenerateFileCommand> excutor)
         {
             SizeInBytes = sizeInBytes;
-            FileGenerator = fileGenerator;
+            _executor = excutor;
         }
 
         public static ICommand? ParseFromArgs(string[] args)
@@ -40,7 +32,7 @@ namespace WUrban.TestTask.Generator.Args
         public async Task ExecuteAsync()
         {
             Console.WriteLine($"{DateTime.Now} Generating file with size {SizeInBytes} bytes...");
-            await FileGenerator.ExecuteAsync(this);
+            await _executor.ExecuteAsync(this);
             Console.WriteLine($"{DateTime.Now} File generated.");
         }
     }

@@ -2,7 +2,7 @@
   "profiles": {
     "WUrban.TestTask.Generator": {
       "commandName": "Project",
-      "commandLineArgs": "generateFile --size=1000000000"
+      "commandLineArgs": "generate --size=1000000000"
     }
   }
 }
