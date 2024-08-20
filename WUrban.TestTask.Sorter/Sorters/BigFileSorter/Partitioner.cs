@@ -1,39 +1,45 @@
-﻿using System.Buffers;
-using WUrban.TestTask.Contracts;
+﻿using WUrban.TestTask.Contracts;
 
 namespace WUrban.TestTask.Sorter.Sorters.BigFileSorter
 {
     internal class Partitioner
     {
-        private readonly EntriesReader _entriesReader;
-        private readonly long _maxPartitionSize;
+        private readonly IPartitionStore _partitionStore;
+        private readonly int _maxPartitionSize;
 
-        public Partitioner(EntriesReader entriesReader,long maxPartitionSize = 50_000_000)
+        public Partitioner(IPartitionStore partitionStore, int maxPartitionSize = 100_000_000)
         {
             ArgumentOutOfRangeException.ThrowIfLessThan(maxPartitionSize, 10_000_000);
-            _entriesReader = entriesReader;
+            _partitionStore = partitionStore;
             _maxPartitionSize = maxPartitionSize;
         }
 
-        public async Task<IEnumerable<string>> Partition()
+        public async IAsyncEnumerable<Partition> PartitionAsync(IAsyncEnumerable<Entry> entries)
         {
-            using var enumerator = _entriesReader.GetEnumerator();
-            var list = new List<Entry>(2560000);
-            var partitions = new List<string>();
+            var queue = new Queue<Entry>();
             int size = 0;
-            while (enumerator.MoveNext())
+            await foreach (var entry in entries)
             {
-                list.Add(enumerator.Current);
-                size += enumerator.Current.Size();
+                queue.Enqueue(entry);
+                size += entry.Size();
                 if(size >= _maxPartitionSize)
                 {
-                    var file = await list.OrderAndStoreExternalyAsync();
-                    partitions.Add(file);
-                    list.Clear();
+                    var array = queue.ToArray();
+                    Array.Sort(array);
+                    var file = await _partitionStore.Save(array);
+                    yield return file;
+                    queue.Clear();
                     size = 0;
                 }
             }
-            return partitions;
+        }
+    }
+
+    internal static class PartitionerExtensions
+    {
+        public static IAsyncEnumerable<Partition> Partition(this IAsyncEnumerable<Entry> entries, int maxPartitionSize = 100_000_000)
+        {
+            return new Partitioner(new PartitionStore()).PartitionAsync(entries);
         }
     }
 }

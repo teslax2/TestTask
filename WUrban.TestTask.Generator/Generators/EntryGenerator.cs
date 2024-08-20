@@ -3,8 +3,9 @@ using WUrban.TestTask.Contracts;
 
 namespace WUrban.TestTask.Generator.Generator
 {
-    internal class EntryGenerator
+    internal static class EntryGenerator
     {
+        private static Random _random = new ();
         private static readonly string[] _words = {
             "the", "be", "to", "of", "and", "a", "in", "that", "have", "I",
             "it", "for", "not", "on", "with", "he", "as", "you", "do", "at",
@@ -50,23 +51,26 @@ namespace WUrban.TestTask.Generator.Generator
 
         public static Entry GenerateEntry()
         {
-            var random = new Random();
-            var length = random.Next(3,20);
-            var sentence = new string[length];
+            var length = _random.Next(3, 20);
+            var sb = new StringBuilder();
+
             for (int i = 0; i < length; i++)
             {
                 if (i == 0)
                 {
-                    var word = _words[random.Next(_words.Length)];
-                    sentence[i] = char.ToUpper(word[0]) + word[1..];
+                    var word = _words[_random.Next(_words.Length)];
+                    sb.Append(char.ToUpper(word[0]) + word[1..]);
                 }
                 else
                 {
-                    sentence[i] = _words[random.Next(_words.Length)];
+                    sb.Append(' ');
+                    sb.Append(_words[_random.Next(_words.Length)]);
                 }
-
             }
-            return new Entry(random.Next(),string.Join(" ",sentence));
+
+            sb.Append('.');
+
+            return new Entry(_random.Next(), sb.ToString());
         }
     }
 }

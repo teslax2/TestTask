@@ -1,4 +1,4 @@
-﻿using WUrban.TestTask.Generator.Utils;
+﻿using WUrban.TestTask.Generator.CommandLine;
 
 namespace WUrban.TestTask.Generator
 {
@@ -6,10 +6,8 @@ namespace WUrban.TestTask.Generator
     {
         static async Task Main(string[] args)
         {
-            Console.WriteLine($"Started at {DateTime.Now}");
             var command = Parser.Parse(args);
             await command.ExecuteAsync();
-            Console.WriteLine($"Completed at {DateTime.Now}");
         }
     }
 }

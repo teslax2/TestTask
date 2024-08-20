@@ -5,9 +5,11 @@ VisualStudioVersion = 17.10.35201.131
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WUrban.TestTask.Generator", "WUrban.TestTask.Generator\WUrban.TestTask.Generator.csproj", "{6B9E30EB-9FC3-480C-A91F-C8F90331A327}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WUrban.TestTask.Sorter", "WUrban.TestTask.Sorter\WUrban.TestTask.Sorter.csproj", "{04C2532C-9DBC-4038-BEE5-587574855CD0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WUrban.TestTask.Sorter", "WUrban.TestTask.Sorter\WUrban.TestTask.Sorter.csproj", "{04C2532C-9DBC-4038-BEE5-587574855CD0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WUrban.TestTask.Contracts", "WUrban.TestTask.Contracts\WUrban.TestTask.Contracts.csproj", "{9149FB8F-7746-45F0-BE38-37544E03B61F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WUrban.TestTask.Contracts", "WUrban.TestTask.Contracts\WUrban.TestTask.Contracts.csproj", "{9149FB8F-7746-45F0-BE38-37544E03B61F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WUrban.TestTask.Benchmarks", "WUrban.TestTask.Benchmarks\WUrban.TestTask.Benchmarks.csproj", "{1928E28C-D616-4512-B299-0759272453E9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{9149FB8F-7746-45F0-BE38-37544E03B61F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9149FB8F-7746-45F0-BE38-37544E03B61F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9149FB8F-7746-45F0-BE38-37544E03B61F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1928E28C-D616-4512-B299-0759272453E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1928E28C-D616-4512-B299-0759272453E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1928E28C-D616-4512-B299-0759272453E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1928E28C-D616-4512-B299-0759272453E9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

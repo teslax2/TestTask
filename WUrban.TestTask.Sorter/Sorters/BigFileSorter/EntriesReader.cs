@@ -1,59 +1,28 @@
-﻿using System.Buffers;
-using System.Collections;
-using System.Text;
-using WUrban.TestTask.Contracts;
+﻿using WUrban.TestTask.Contracts;
 
 namespace WUrban.TestTask.Sorter.Sorters.BigFileSorter
 {
-    internal class EntriesReader : IEnumerable<Entry>
+    internal class EntriesReader
     {
         private readonly StreamReader _streamReader;
-        private readonly int _bufferSize = 8190;
+        private readonly int _bufferSize;
 
-        public EntriesReader(string path)
+        public EntriesReader(string path, int bufferSize = 81920)
         {
+            _bufferSize = bufferSize;
             _streamReader = new StreamReader(File.OpenRead(path), bufferSize: _bufferSize);
         }
 
-        public IEnumerator<Entry> GetEnumerator()
+        public async IAsyncEnumerable<Entry> GetEntriesAsync()
         {
-            var arrayPool = ArrayPool<char>.Shared.Rent(_bufferSize);
-            var sb = new StringBuilder();
-            try
+            while (!_streamReader.EndOfStream)
             {
-                while (true)
+                var line = await _streamReader.ReadLineAsync();
+                if (line != null)
                 {
-                    var count = _streamReader.ReadBlock(arrayPool, 0, _bufferSize);
-                    if (count == 0) break;
-
-                    for (var i = 0; i < count; i++)
-                    {
-                        if (arrayPool[i] == '\n')
-                        {
-                            var entryString = sb.ToString();
-                            if (!string.IsNullOrWhiteSpace(entryString))
-                            {
-                                yield return Entry.Parse(entryString);
-                            }
-                            sb.Clear();
-                        }
-                        else if (arrayPool[i] != '\r')
-                        {
-                            sb.Append(arrayPool[i]);
-                        }
-                    }
+                    yield return Entry.Parse(line);
                 }
             }
-            finally
-            {
-                ArrayPool<char>.Shared.Return(arrayPool);
-                _streamReader.Dispose();
-            }
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
     }
 }
