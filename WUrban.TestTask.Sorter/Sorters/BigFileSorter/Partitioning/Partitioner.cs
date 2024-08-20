@@ -1,8 +1,9 @@
 ﻿using WUrban.TestTask.Contracts;
+using WUrban.TestTask.Sorter.Sorters.BigFileSorter.Core;
 
-namespace WUrban.TestTask.Sorter.Sorters.BigFileSorter
+namespace WUrban.TestTask.Sorter.Sorters.BigFileSorter.Partitioning
 {
-    internal class Partitioner
+    internal class Partitioner : IPartitioner
     {
         private readonly IPartitionStore _partitionStore;
         private readonly int _maxPartitionSize;
@@ -22,7 +23,7 @@ namespace WUrban.TestTask.Sorter.Sorters.BigFileSorter
             {
                 queue.Enqueue(entry);
                 size += entry.Size();
-                if(size >= _maxPartitionSize)
+                if (size >= _maxPartitionSize)
                 {
                     var array = queue.ToArray();
                     Array.Sort(array);
@@ -39,7 +40,7 @@ namespace WUrban.TestTask.Sorter.Sorters.BigFileSorter
     {
         public static IAsyncEnumerable<Partition> Partition(this IAsyncEnumerable<Entry> entries, int maxPartitionSize = 100_000_000)
         {
-            return new Partitioner(new PartitionStore()).PartitionAsync(entries);
+            return new Partitioner(new PartitionStore(), maxPartitionSize).PartitionAsync(entries);
         }
     }
 }

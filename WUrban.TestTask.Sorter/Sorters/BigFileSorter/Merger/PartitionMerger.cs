@@ -1,20 +1,28 @@
-﻿using System.Collections.Concurrent;
-using WUrban.TestTask.Contracts;
+﻿using WUrban.TestTask.Contracts;
+using WUrban.TestTask.Sorter.Sorters.BigFileSorter.Core;
 
-namespace WUrban.TestTask.Sorter.Sorters.BigFileSorter
+namespace WUrban.TestTask.Sorter.Sorters.BigFileSorter.Merger
 {
-    internal class PartitionMerger
+    internal class PartitionMerger : IPartitionMerger
     {
+        private readonly IPartitionStore _partitionStore;
         private readonly int _bufferSize;
 
-        public PartitionMerger(int bufferSize = 81920)
+        public PartitionMerger(IPartitionStore partitionStore, int bufferSize = 81920)
         {
+            _partitionStore = partitionStore;
             _bufferSize = bufferSize;
         }
         public async Task MergePartitionsAsync(IAsyncEnumerable<Partition> partitions, string outputFileName)
         {
             using var outputStream = File.OpenWrite(outputFileName);
             using var writer = new StreamWriter(outputStream, bufferSize: _bufferSize);
+            await MergePartitionsBaseAsync(partitions, writer);
+        }
+
+        public async Task MergePartitionsAsync(IAsyncEnumerable<Partition> partitions, Stream stream)
+        {
+            using var writer = new StreamWriter(stream, bufferSize: _bufferSize);
             await MergePartitionsBaseAsync(partitions, writer);
         }
 
@@ -40,12 +48,12 @@ namespace WUrban.TestTask.Sorter.Sorters.BigFileSorter
             }
         }
 
-        private static async Task<Dictionary<StreamReader, Entry>> InitializeQueue(IAsyncEnumerable<Partition> partitions, int bufferSize)
+        private async Task<Dictionary<StreamReader, Entry>> InitializeQueue(IAsyncEnumerable<Partition> partitions, int bufferSize)
         {
             var readers = new List<StreamReader>();
             await foreach (var partition in partitions)
             {
-                readers.Add(partition.GetStreamReader(bufferSize));
+                readers.Add(_partitionStore.GetStreamReader(partition));
             }
 
             var queue = new Dictionary<StreamReader, Entry>();
@@ -79,7 +87,7 @@ namespace WUrban.TestTask.Sorter.Sorters.BigFileSorter
     {
         public static async Task Merge(this IAsyncEnumerable<Partition> partitions, string outputFileName)
         {
-            await new PartitionMerger().MergePartitionsAsync(partitions, outputFileName);
+            await new PartitionMerger(new PartitionStore()).MergePartitionsAsync(partitions, outputFileName);
         }
     }
 }

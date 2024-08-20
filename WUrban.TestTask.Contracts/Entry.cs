@@ -26,21 +26,17 @@
             return $"{Sequence}. {Text}";
         }
 
-        public static Entry Parse(string text)
-        {
-            var dotIndex = text.IndexOf('.');
-            if (dotIndex < 0)
-            {
-                throw new EntryException($"Invalid entry format: {text}");
-            }
-
+        public static Entry Parse(string? text)
+        {       
             try
             {
+                ArgumentNullException.ThrowIfNull(text, nameof(text));
+                var dotIndex = text?.IndexOf('.') ?? throw new EntryException("No dot found");
                 return new Entry(int.Parse(text[..dotIndex]), text[++dotIndex..]);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return new Entry(0, string.Empty);
+                throw new EntryException($"Invalid entry format: {text}", ex);
             }
         }
     }

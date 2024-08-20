@@ -1,4 +1,7 @@
-﻿
+﻿using WUrban.TestTask.Sorter.Sorters.BigFileSorter.Merger;
+using WUrban.TestTask.Sorter.Sorters.BigFileSorter.Partitioning;
+using WUrban.TestTask.Sorter.Sorters.BigFileSorter.Reader;
+
 namespace WUrban.TestTask.Sorter.Sorters.BigFileSorter
 {
     internal class BigFileSorter : ISorter
