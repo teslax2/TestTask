@@ -13,7 +13,7 @@ namespace WUrban.TestTask.Generator.Generators
         }
 
         public async Task GenerateAsync(long sizeInBytes, string output) 
-            => await GenerateAsync(sizeInBytes, File.Open(output,FileMode.Truncate));
+            => await GenerateAsync(sizeInBytes, File.Open(output,FileMode.Create));
 
         public async Task GenerateAsync(long sizeInBytes, Stream stream)
         {

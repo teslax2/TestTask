@@ -18,7 +18,7 @@ namespace WUrban.TestTask.Sorter.Sorters.BigFileSorter.Tests
             entriesReader.Setup(e => e.GetEntriesAsync()).Returns(GetEntries);
             var bigFileSorter = new BigFileSorter(entriesReader.Object);
             string inputPath = "inputPath";
-            string outputPath = "outputPath";
+            string outputPath = "outputPath.txt";
             // Act
             await bigFileSorter.SortAsync(inputPath, outputPath);
             // Assert
