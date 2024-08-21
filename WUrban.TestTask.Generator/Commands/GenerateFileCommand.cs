@@ -10,11 +10,11 @@ namespace WUrban.TestTask.Generator.Args
     internal class GenerateFileCommand : ICommand
     {
         public const string Name = "Generate";
-        public int SizeInBytes { get; }
+        public long SizeInBytes { get; }
         public string Output { get; }
         private readonly IExecutor<GenerateFileCommand> _executor;
 
-        public GenerateFileCommand(int sizeInBytes, string output, IExecutor<GenerateFileCommand> excutor)
+        public GenerateFileCommand(long sizeInBytes, string output, IExecutor<GenerateFileCommand> excutor)
         {
             ArgumentOutOfRangeException.ThrowIfLessThan(sizeInBytes, 0, nameof(sizeInBytes));
             ArgumentException.ThrowIfNullOrWhiteSpace(output, nameof(output));
@@ -28,7 +28,7 @@ namespace WUrban.TestTask.Generator.Args
             if (args.Length >=2
                 && args[0].Equals(Name, StringComparison.OrdinalIgnoreCase)
                 && args[1].StartsWith("--size=")
-                && int.TryParse(args[1][7..], out var sizeInBytes))
+                && long.TryParse(args[1][7..], out var sizeInBytes))
             {
                 if (args.Length >= 3 && args[2].StartsWith("--output="))
                 {

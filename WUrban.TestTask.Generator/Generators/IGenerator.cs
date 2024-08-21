@@ -2,6 +2,6 @@
 {
     internal interface IGenerator
     {
-        Task GenerateAsync(int sizeInBytes, string output);
+        Task GenerateAsync(long sizeInBytes, string output);
     }
 }
