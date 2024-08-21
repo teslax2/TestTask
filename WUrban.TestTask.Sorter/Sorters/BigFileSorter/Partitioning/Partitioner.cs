@@ -27,6 +27,7 @@ namespace WUrban.TestTask.Sorter.Sorters.BigFileSorter.Partitioning
                 {
                     var array = queue.ToArray();
                     Array.Sort(array);
+                    Console.WriteLine($"Sorted {array.Length} entries");
                     var file = await _partitionStore.Save(array);
                     yield return file;
                     queue.Clear();

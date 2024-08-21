@@ -15,7 +15,7 @@ namespace WUrban.TestTask.Sorter.Sorters.BigFileSorter.Merger
         }
         public async Task MergePartitionsAsync(IAsyncEnumerable<Partition> partitions, string outputFileName)
         {
-            using var outputStream = File.OpenWrite(outputFileName);
+            using var outputStream = File.Open(outputFileName,FileMode.Truncate);
             using var writer = new StreamWriter(outputStream, bufferSize: _bufferSize);
             await MergePartitionsBaseAsync(partitions, writer);
         }
@@ -68,6 +68,7 @@ namespace WUrban.TestTask.Sorter.Sorters.BigFileSorter.Merger
         }
         private static async Task SortAndWriteAsync(StreamWriter writer, Dictionary<StreamReader, Entry> queue)
         {
+            Console.WriteLine("Merging partitions...");
             while (queue.Count > 0)
             {
                 var x = queue.MinBy(x => x.Value);

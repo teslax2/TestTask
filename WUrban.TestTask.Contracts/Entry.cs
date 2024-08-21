@@ -11,7 +11,7 @@
                 return 1;
             }
 
-            var textComparisionResult = string.CompareOrdinal(Text, other.Text);
+            var textComparisionResult = string.Compare(Text, other.Text,StringComparison.CurrentCultureIgnoreCase);
 
             if (textComparisionResult == 0)
             {
@@ -32,7 +32,8 @@
             {
                 ArgumentNullException.ThrowIfNull(text, nameof(text));
                 var dotIndex = text?.IndexOf('.') ?? throw new EntryException("No dot found");
-                return new Entry(int.Parse(text[..dotIndex]), text[++dotIndex..]);
+                var sentenceIndex = dotIndex + 2;
+                return new Entry(int.Parse(text[..dotIndex]), text[sentenceIndex..]);
             }
             catch (Exception ex)
             {
