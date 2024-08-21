@@ -33,6 +33,15 @@ namespace WUrban.TestTask.Sorter.Sorters.BigFileSorter.Partitioning
                     size = 0;
                 }
             }
+            // if entries stream is over but there are still entries in the queue
+            if (size > 0)
+            {
+                var array = queue.ToArray();
+                Array.Sort(array);
+                var file = await _partitionStore.Save(array);
+                yield return file;
+                queue.Clear();
+            }
         }
     }
 

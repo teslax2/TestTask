@@ -2,7 +2,7 @@
 
 namespace WUrban.TestTask.Sorter.Sorters.BigFileSorter.Reader
 {
-    internal interface IEntriesReader
+    public interface IEntriesReader
     {
         IAsyncEnumerable<Entry> GetEntriesAsync();
     }

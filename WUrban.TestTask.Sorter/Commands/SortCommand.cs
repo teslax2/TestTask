@@ -1,7 +1,7 @@
 ﻿using WUrban.TestTask.Contracts;
 using WUrban.TestTask.Generator.Generator;
-using WUrban.TestTask.Sorter.Sorters;
 using WUrban.TestTask.Sorter.Sorters.BigFileSorter;
+using WUrban.TestTask.Sorter.Sorters.BigFileSorter.Reader;
 
 namespace WUrban.TestTask.Sorter.Commands
 {
@@ -14,6 +14,8 @@ namespace WUrban.TestTask.Sorter.Commands
 
         public SortCommand(string path, string output, IExecutor<SortCommand> executor) 
         {
+            ArgumentException.ThrowIfNullOrEmpty(path, nameof(path));
+            ArgumentException.ThrowIfNullOrEmpty(output, nameof(output));
             Path = path;
             Output = output;
             _executor = executor;
@@ -28,11 +30,12 @@ namespace WUrban.TestTask.Sorter.Commands
             if (args[0].Equals(Name, StringComparison.OrdinalIgnoreCase)
                 && args[1].StartsWith("--path="))
             {
+                var path = args[1][7..];
                 if (args.Length == 3 && args[2].StartsWith("--output="))
                 {
-                    return new SortCommand(args[1][7..], args[2][9..], new SortCommandExecutor(new BigFileSorter()));
+                    return new SortCommand(path, args[2][9..], new SortCommandExecutor(new BigFileSorter(new EntriesReader(path))));
                 }
-                return new SortCommand(args[1][7..], "output.txt", new SortCommandExecutor(new BigFileSorter()));
+                return new SortCommand(path, "output.txt", new SortCommandExecutor(new BigFileSorter(new EntriesReader(path))));
             }
             return null;
         }

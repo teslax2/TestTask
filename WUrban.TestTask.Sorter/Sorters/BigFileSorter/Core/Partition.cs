@@ -1,8 +1,8 @@
 ﻿namespace WUrban.TestTask.Sorter.Sorters.BigFileSorter.Core
 {
-    internal record Partition(string path)
+    public record Partition(string Path)
     {
         public static implicit operator Partition(string path) => new(path);
-        public static implicit operator string(Partition partition) => partition.path;
+        public static implicit operator string(Partition partition) => partition.Path;
     }
 }

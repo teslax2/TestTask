@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="WUrban.TestTask.UnitTests" />
     <ProjectReference Include="..\WUrban.TestTask.Contracts\WUrban.TestTask.Contracts.csproj" />
   </ItemGroup>
 

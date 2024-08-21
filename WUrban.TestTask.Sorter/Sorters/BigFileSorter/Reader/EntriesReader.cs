@@ -12,7 +12,7 @@ namespace WUrban.TestTask.Sorter.Sorters.BigFileSorter.Reader
             _bufferSize = bufferSize;
             _streamReader = new StreamReader(File.OpenRead(path), bufferSize: _bufferSize);
         }
-
+        // for testing purposes
         public EntriesReader(Stream stream, int bufferSize = 81920)
         {
             _bufferSize = bufferSize;

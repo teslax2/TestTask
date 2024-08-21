@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WUrban.TestTask.Sorter", "W
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WUrban.TestTask.Contracts", "WUrban.TestTask.Contracts\WUrban.TestTask.Contracts.csproj", "{9149FB8F-7746-45F0-BE38-37544E03B61F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WUrban.TestTask.Benchmarks", "WUrban.TestTask.Benchmarks\WUrban.TestTask.Benchmarks.csproj", "{1928E28C-D616-4512-B299-0759272453E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WUrban.TestTask.Benchmarks", "WUrban.TestTask.Benchmarks\WUrban.TestTask.Benchmarks.csproj", "{1928E28C-D616-4512-B299-0759272453E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WUrban.TestTask.UnitTests", "WUrban.TestTask.UnitTests\WUrban.TestTask.UnitTests.csproj", "{A13828C3-F45C-46D8-AA7F-E1CB3740A695}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{1928E28C-D616-4512-B299-0759272453E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1928E28C-D616-4512-B299-0759272453E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1928E28C-D616-4512-B299-0759272453E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A13828C3-F45C-46D8-AA7F-E1CB3740A695}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A13828C3-F45C-46D8-AA7F-E1CB3740A695}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A13828C3-F45C-46D8-AA7F-E1CB3740A695}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A13828C3-F45C-46D8-AA7F-E1CB3740A695}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

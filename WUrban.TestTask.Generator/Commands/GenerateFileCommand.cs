@@ -17,6 +17,7 @@ namespace WUrban.TestTask.Generator.Args
         public GenerateFileCommand(int sizeInBytes, string output, IExecutor<GenerateFileCommand> excutor)
         {
             ArgumentOutOfRangeException.ThrowIfLessThan(sizeInBytes, 0, nameof(sizeInBytes));
+            ArgumentException.ThrowIfNullOrWhiteSpace(output, nameof(output));
             SizeInBytes = sizeInBytes;
             Output = output;
             _executor = excutor;

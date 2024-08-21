@@ -19,7 +19,7 @@ namespace WUrban.TestTask.Sorter.Sorters.BigFileSorter.Merger
             using var writer = new StreamWriter(outputStream, bufferSize: _bufferSize);
             await MergePartitionsBaseAsync(partitions, writer);
         }
-
+        // for testing purposes
         public async Task MergePartitionsAsync(IAsyncEnumerable<Partition> partitions, Stream stream)
         {
             using var writer = new StreamWriter(stream, bufferSize: _bufferSize);
