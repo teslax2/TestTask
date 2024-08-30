@@ -4,7 +4,7 @@ namespace WUrban.TestTask.Sorter.Sorters.BigFileSorter.Core
 {
     public interface IPartitionStore
     {
-        Task<Partition> Save(Entry[] entries);
+        Task<Partition> Save(IEnumerable<Entry> entries);
         StreamReader GetStreamReader(Partition partition, int bufferSize = 81920);
     }
 }

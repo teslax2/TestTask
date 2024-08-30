@@ -1,5 +1,6 @@
 ﻿using BenchmarkDotNet.Attributes;
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,7 @@ namespace WUrban.TestTask.Benchmarks
     [MemoryDiagnoser]
     public class Sorters
     {
-        private const string _filePath = @"C:\Users\wiurban\source\repos\TestTask\WUrban.TestTask\WUrban.TestTask.Generator\bin\Debug\net8.0\output.txt";
+        private const string _filePath = @"C:\temp\test.txt";
 
         [Benchmark]
         [IterationCount(3)]
@@ -57,10 +58,11 @@ namespace WUrban.TestTask.Benchmarks
             Array.Sort(array);
         }
 
+
         public IEnumerable<Entry> ReadFileLineByLineImpl()
         {
-            var stream = File.OpenRead(_filePath);
-            var reader = new StreamReader(stream, bufferSize: 81920);
+            var stream = new FileStream(_filePath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: 40960);
+            var reader = new StreamReader(stream);
             while (!reader.EndOfStream)
             {
                 var line = reader.ReadLine();

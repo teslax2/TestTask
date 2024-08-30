@@ -28,61 +28,24 @@ namespace WUrban.TestTask.Sorter.Sorters.BigFileSorter.Merger
 
         private async Task MergePartitionsBaseAsync(IAsyncEnumerable<Partition> partitions, StreamWriter writer)
         {
-            var queue = new Dictionary<StreamReader, Entry>();
-            try
-            {
-                queue = await InitializeQueue(partitions, _bufferSize);
-                await SortAndWriteAsync(writer, queue);
-            }
-            finally
-            {
-                CleanUp(queue);
-            }
-        }
-
-        private static void CleanUp(Dictionary<StreamReader, Entry> queue)
-        {
-            foreach (var reader in queue.Keys)
-            {
-                reader?.Dispose();
-            }
-        }
-
-        private async Task<Dictionary<StreamReader, Entry>> InitializeQueue(IAsyncEnumerable<Partition> partitions, int bufferSize)
-        {
-            var readers = new List<StreamReader>();
+            var queue = new PriorityQueue<EntryStreamReader,Entry>();
             await foreach (var partition in partitions)
             {
-                readers.Add(_partitionStore.GetStreamReader(partition));
+                var reader = _partitionStore.GetStreamReader(partition);
+                var entry = Entry.Parse(await reader.ReadLineAsync());
+                queue.Enqueue(new EntryStreamReader(entry, reader),entry);
             }
-
-            var queue = new Dictionary<StreamReader, Entry>();
-            foreach (var reader in readers)
+            while(queue.TryDequeue(out var entryReader,out _))
             {
-                var line = await reader.ReadLineAsync();
-                var entry = Entry.Parse(line);
-                queue.Add(reader, entry);
-            }
-
-            return queue;
-        }
-        private static async Task SortAndWriteAsync(StreamWriter writer, Dictionary<StreamReader, Entry> queue)
-        {
-            Console.WriteLine("Merging partitions...");
-            while (queue.Count > 0)
-            {
-                var x = queue.MinBy(x => x.Value);
-                await writer.WriteLineAsync(x.Value.ToString());
-                if (x.Key.EndOfStream)
-                {
-                    queue.Remove(x.Key);
-                    continue;
-                }
-                var line = await x.Key.ReadLineAsync();
-                queue[x.Key] = Entry.Parse(line);
+                await writer.WriteLineAsync(entryReader.Entry.ToString());
+                if(entryReader.Reader.EndOfStream) continue;
+                var nextEntry = Entry.Parse(await entryReader.Reader.ReadLineAsync());
+                queue.Enqueue(new EntryStreamReader(nextEntry, entryReader.Reader),nextEntry);
             }
         }
     }
+
+    public record EntryStreamReader(Entry Entry, StreamReader Reader);
 
     internal static class PartitionMergerExtensions
     {

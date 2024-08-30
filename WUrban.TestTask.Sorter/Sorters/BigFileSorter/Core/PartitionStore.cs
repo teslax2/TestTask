@@ -4,16 +4,22 @@ namespace WUrban.TestTask.Sorter.Sorters.BigFileSorter.Core
 {
     internal class PartitionStore : IPartitionStore
     {
-        public async Task<Partition> Save(Entry[] entries)
+        public async Task<Partition> Save(IEnumerable<Entry> entries)
         {
             var fileName = Path.GetTempFileName();
-            await File.WriteAllLinesAsync(fileName, entries.Select(x => x.ToString()));
+            var stream = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize: 40960);
+            await using var writer = new StreamWriter(stream);
+            foreach (var entry in entries)
+            {
+                await writer.WriteLineAsync(entry.ToString());
+            }
             return fileName;
         }
 
-        public StreamReader GetStreamReader(Partition partition, int bufferSize = 81920)
+        public StreamReader GetStreamReader(Partition partition, int bufferSize = 40960)
         {
-            return new StreamReader(File.OpenRead(partition), bufferSize: bufferSize);
+            var stream = new FileStream(partition, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize);
+            return new StreamReader(stream);
         }
     }
 }

@@ -6,7 +6,7 @@ namespace WUrban.TestTask.Benchmarks
     {
         static void Main(string[] args)
         {
-            var results = BenchmarkRunner.Run<Sorters>();
+            var results = BenchmarkRunner.Run<FileReaders>();
         }
     }
 }
