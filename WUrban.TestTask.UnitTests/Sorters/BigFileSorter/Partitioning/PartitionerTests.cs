@@ -18,7 +18,7 @@ namespace WUrban.TestTask.Sorter.Sorters.BigFileSorter.Partitioning.Tests
         {
             // Arrange
             var partitionStore = new Mock<IPartitionStore>();
-            partitionStore.Setup(p => p.Save(It.IsAny<Entry[]>())).ReturnsAsync(new Partition("path"));
+            partitionStore.Setup(p => p.SaveAsync(It.IsAny<Entry[]>())).ReturnsAsync(new Partition("path"));
             var partitioner = new Partitioner(partitionStore.Object);
             async IAsyncEnumerable<Entry> GetEntries()
             {
@@ -36,7 +36,7 @@ namespace WUrban.TestTask.Sorter.Sorters.BigFileSorter.Partitioning.Tests
         {
             // Arrange
             var partitionStore = new Mock<IPartitionStore>();
-            partitionStore.Setup(p => p.Save(It.IsAny<Entry[]>())).ReturnsAsync(new Partition("path"));
+            partitionStore.Setup(p => p.SaveAsync(It.IsAny<Entry[]>())).ReturnsAsync(new Partition("path"));
             var partitioner = new Partitioner(partitionStore.Object, 10_000_000);
             async IAsyncEnumerable<Entry> GetEntries()
             {

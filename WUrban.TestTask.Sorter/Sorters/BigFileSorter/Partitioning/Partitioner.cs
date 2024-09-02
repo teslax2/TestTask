@@ -1,4 +1,5 @@
-﻿using System.Net.NetworkInformation;
+﻿using System.Buffers;
+using System.Net.NetworkInformation;
 using WUrban.TestTask.Contracts;
 using WUrban.TestTask.Sorter.Sorters.BigFileSorter.Core;
 
@@ -29,10 +30,7 @@ namespace WUrban.TestTask.Sorter.Sorters.BigFileSorter.Partitioning
                 size += entry.Size();
                 if (size >= _maxPartitionSize)
                 {
-                    await _semaphore.WaitAsync();
-                    var array = queue.ToArray();
-                    queue.Clear();
-                    _partitionNumber++;
+                    var array = await CopyToArray(queue).ConfigureAwait(false);
                     var partition = SortAndSavePartition(array, size, _partitionNumber);
                     saveTasks.Add(partition);
                     size = 0;
@@ -41,10 +39,7 @@ namespace WUrban.TestTask.Sorter.Sorters.BigFileSorter.Partitioning
             // if entries stream is over but there are still entries in the queue
             if (size > 0)
             {
-                await _semaphore.WaitAsync();
-                var array = queue.ToArray();
-                queue.Clear();
-                _partitionNumber++;
+                var array = await CopyToArray(queue).ConfigureAwait(false);
                 var partition = SortAndSavePartition(array, size, _partitionNumber);
                 saveTasks.Add(partition);
             }
@@ -54,12 +49,21 @@ namespace WUrban.TestTask.Sorter.Sorters.BigFileSorter.Partitioning
             }
         }
 
+        private async Task<Entry[]> CopyToArray(Queue<Entry> queue)
+        {
+            await _semaphore.WaitAsync().ConfigureAwait(false);
+            var array = queue.ToArray();
+            queue.Clear();
+            _partitionNumber++;
+            return array;
+        }
+
         private async Task<Partition> SortAndSavePartition(Entry[] array, double size, int partitionNumber)
         {
             try
             {
-                await Task.Run(() => Array.Sort(array));
-                return await _partitionStore.Save(array);
+                await Task.Run(() => Array.Sort(array)).ConfigureAwait(false);
+                return await _partitionStore.SaveAsync(array).ConfigureAwait(false);
             }
             finally
             {
